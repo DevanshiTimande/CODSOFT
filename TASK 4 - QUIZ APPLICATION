@@ -1,0 +1,83 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class QuizApp {
+
+    private static List<Question> questions = new ArrayList<>();
+    private static int score = 0;
+
+    public static void main(String[] args) {
+        initQuestions();
+
+        startQuiz();
+
+        displayResults();
+    }
+
+    private static void initQuestions() {
+        questions.add(new Question("What is the output of the following code?\n" +
+                "System.out.println(10 / 3);",
+                new String[]{"3.33", "3", "3.0", "3.3"}, 1));
+        questions.add(new Question("Which of the following is a valid Java data type?",
+                new String[]{"int", "string", "float", "all of the above"}, 0));
+        questions.add(new Question("What is the purpose of the 'main' method in Java?",
+                new String[]{"To execute the program", "To define the class", "To create objects", "To handle exceptions"}, 0));
+    }
+
+    private static void startQuiz() {
+        Scanner scanner = new Scanner(System.in);
+
+        for (int i = 0; i < questions.size(); i++) {
+            Question currentQuestion = questions.get(i);
+
+            System.out.println("Question " + (i + 1) + ":");
+            System.out.println(currentQuestion.getQuestionText());
+            for (int j = 0; j < currentQuestion.getOptions().length; j++) {
+                System.out.println((j + 1) + ". " + currentQuestion.getOptions()[j]);
+            }
+
+            System.out.print("Enter your choice: ");
+            int userChoice = scanner.nextInt();
+
+            if (userChoice == currentQuestion.getCorrectAnswer()) {
+                System.out.println("Correct!");
+                score++;
+            } else {
+                System.out.println("Incorrect. The correct answer is " +
+                        (currentQuestion.getCorrectAnswer() + 1) + ". " +
+                        currentQuestion.getOptions()[currentQuestion.getCorrectAnswer()]);
+            }
+        }
+    }
+
+    private static void displayResults() {
+        System.out.println("\nResults:");
+        System.out.println("Your score: " + score + " out of " + questions.size());
+        System.out.println("Percentage: " + (double) score / questions.size() * 100 + "%");
+    }
+
+    static class Question {
+        private String questionText;
+        private String[] options;
+        private int correctAnswer;
+
+        public Question(String questionText, String[] options, int correctAnswer) {
+            this.questionText = questionText;
+            this.options = options;
+            this.correctAnswer = correctAnswer;
+        }
+
+        public String getQuestionText() {
+            return questionText;
+        }
+
+        public String[] getOptions() {
+            return options;
+        }
+
+        public int getCorrectAnswer() {
+            return correctAnswer;
+        }
+    }
+}
